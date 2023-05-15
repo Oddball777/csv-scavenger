@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "simplecsv"
+version = "0.1.0"
+description = ""
+authors = ["Gustave Coulombe <magikgus@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+pandas = "^2.0.1"
+graphinglib = {git = "https://github.com/GraphingLib/GraphingLib.git"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
