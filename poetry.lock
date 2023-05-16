@@ -616,6 +616,18 @@ files = [
 ]
 
 [[package]]
+name = "tssplit"
+version = "1.0.6"
+description = "Trivial split for strings with quotes and escaped characters"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "tssplit-1.0.6-py3-none-any.whl", hash = "sha256:80b25b79d03dcb6cc0806e14168050d051cc252e7329b6f8fbf72793ee47db09"},
+    {file = "tssplit-1.0.6.tar.gz", hash = "sha256:8e3bc259cc71d44707eeaaf8daaacae5d7d45a9680435fa686958faae44c266f"},
+]
+
+[[package]]
 name = "tzdata"
 version = "2023.3"
 description = "Provider of IANA time zone data"
@@ -630,4 +642,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.11,<3.12"
-content-hash = "c7ad778c89ea43c42e23d73883291beb02ddb28069eddd3cb4993b7bc82be6a3"
+content-hash = "31ceba90901778c43a10890127d148ab47adf49311309fd829ba9bdfbe32219b"
