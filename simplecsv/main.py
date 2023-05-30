@@ -13,16 +13,16 @@ def _determine_format(lines: list[str]) -> tuple[str, int]:
                 formats.append((delim, num_of_columns))
     counter = Counter(formats)
     try:
-        format: tuple[str, int] = counter.most_common(1)[0][0]
+        csv_format: tuple[str, int] = counter.most_common(1)[0][0]
     except IndexError:
         raise IndexError(
             "No delimiter found. Currently supported delimiters are the comma, ;, \\t, \\n, \\r, \\r\\n, and whitespace."
         )
-    return format
+    return csv_format
 
 
 def _determine_header_start_last(
-    format: tuple[str, int], lines: list[str]
+    csv_format: tuple[str, int], lines: list[str]
 ) -> tuple[Optional[int], Optional[int], Optional[int]]:
     header_line = None
     last_line = None
@@ -31,11 +31,11 @@ def _determine_header_start_last(
     for i, line in enumerate(lines):
         if i % step == 0:
             num_of_columns = len(
-                tssplit(line.strip(), quote='"', delimiter=format[0], escape="")  # type: ignore
+                tssplit(line.strip(), quote='"', delimiter=csv_format[0], escape="")  # type: ignore
             )
-            if num_of_columns == format[1] and header_line == None:
+            if num_of_columns == csv_format[1] and header_line == None:
                 header_line = i
-            elif num_of_columns != format[1] and header_line != None:
+            elif num_of_columns != csv_format[1] and header_line != None:
                 last_line = i
                 break
     if last_line == None:
@@ -45,21 +45,24 @@ def _determine_header_start_last(
 
 
 def read_csv(file_path: str) -> pd.DataFrame:
-    with open(file_path, "r") as file:
-        lines = file.readlines()
+    try:
+        with open(file_path, "r") as file:
+            lines = file.readlines()
+    except FileNotFoundError:
+        raise FileNotFoundError(f"File {file_path} not found.")
 
-    format = _determine_format(lines)
+    csv_format = _determine_format(lines)
 
     header_row, data_start_row, data_end_row = _determine_header_start_last(
-        format, lines
+        csv_format, lines
     )
 
     if header_row == None or data_start_row == None or data_end_row == None:
-        raise ValueError("Probleeeem")
+        raise ValueError("Could not determine header and data rows.")
 
     data = pd.read_csv(  # type: ignore
         file_path,
-        sep=format[0],
+        sep=csv_format[0],
         skiprows=data_start_row - 1,
         nrows=data_end_row - data_start_row,
         engine="python",
@@ -67,7 +70,7 @@ def read_csv(file_path: str) -> pd.DataFrame:
 
     if len(data) == 0:
         raise ValueError(
-            f"CSV data is not in a recognized format. Detected delimiter is: {format[0]}"
+            f"CSV data is not in a recognized format. Detected delimiter is: {csv_format[0]}"
         )
 
     return data
