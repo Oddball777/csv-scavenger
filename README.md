@@ -14,14 +14,5 @@ pip install simplecsv
 import simplecsv
 
 # Read a CSV file into a pandas DataFrame
-data_1 = simplecsv.read_csv('data.csv')
-
-# Read a CSV file into a list of lists
-data_2 = simplecsv.read_csv('data.csv', as_list=True)
-
-# Read a CSV file into a list of dicts
-data_3 = simplecsv.read_csv('data.csv', as_dict=True)
-
-# Read a CSV file into a list of namedtuples
-data_4 = simplecsv.read_csv('data.csv', as_namedtuple=True)
+df = simplecsv.read_csv('data.csv')
 ```
