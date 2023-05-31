@@ -1,3 +1,3 @@
 # type: ignore
 
-from .main import read_csv
+from .scavenger import read_csv

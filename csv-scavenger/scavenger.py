@@ -77,9 +77,9 @@ def read_csv(file_path: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    data_people = read_csv("simplecsv/example_csvs/people.csv")
-    data_faithful = read_csv("simplecsv/example_csvs/faithful.csv")
-    data_orgs = read_csv("simplecsv/example_csvs/orgs.csv")
-    data_health = read_csv("simplecsv/example_csvs/health.csv")
-    data_multimeter = read_csv("simplecsv/example_csvs/multimeter.csv")
+    data_people = read_csv("csv-scavenger/example_csvs/people.csv")
+    data_faithful = read_csv("csv-scavenger/example_csvs/faithful.csv")
+    data_orgs = read_csv("csv-scavenger/example_csvs/orgs.csv")
+    data_health = read_csv("csv-scavenger/example_csvs/health.csv")
+    data_multimeter = read_csv("csv-scavenger/example_csvs/multimeter.csv")
     print(data_health)
