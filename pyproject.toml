@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "simplecsv"
-version = "0.1.0"
+name = "csv-scavenger"
+version = "1.0.0"
 description = ""
 authors = ["Gustave Coulombe <magikgus@gmail.com>"]
 readme = "README.md"
