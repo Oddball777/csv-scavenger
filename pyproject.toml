@@ -4,10 +4,11 @@ version = "1.0.0"
 description = "CSV reader and parser with automatic detection of delimiter and start/end of data."
 authors = ["Gustave Coulombe <magikgus@gmail.com>"]
 readme = "README.md"
+packages = [{include = "main.py", from = "csv-scavenger"}]
 
 [tool.poetry.dependencies]
 python = ">=3.11,<3.12"
-pandas = "^2.0.1"
+pandas = "^2.0.0"
 tssplit = "^1.0.6"
 
 
