@@ -39,7 +39,7 @@ def _determine_header_start_last(
             last_line = i
             break
     if last_line == None:
-        last_line = len(lines) - 1
+        last_line = len(lines)
     first_line: Optional[int] = header_line + 1 if header_line != None else None
     return header_line, first_line, last_line
 
