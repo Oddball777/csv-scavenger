@@ -1,20 +1,20 @@
-# SimpleCSV
+# CSV-Scavenger
 
-SimpleCSV is a simple CSV parser for Python which can detect the delimiter automatically and can parse CSV files with quoted fields. It can also detect the header row and the start and end of the data rows automatically. For most use cases, you can simply call ```simplecsv.read_csv(filename)``` and get a pandas DataFrame back.
+CSV-Scavenger is a simple CSV parser for Python which can detect the delimiter automatically and can parse CSV files with quoted fields. It can also detect the header row and the start and end of the data rows automatically. For most use cases, you can simply call ```sv.read_csv(filename)``` and get a pandas DataFrame back.
 
-See the ```simplecsv/example_csvs``` directory for some example CSV files which are parsed correctly by SimpleCSV.
+See the ```csv-scavenger/example_csvs``` directory for some example CSV files which are parsed correctly by CSV-Scavenger.
 
 ## Installation
 
 ```text
-pip install simplecsv
+pip install csv-scavenger
 ```
 
 ## Usage
 
 ```python
-import simplecsv
+import csv-scavenger as sv
 
 # Read a CSV file into a pandas DataFrame
-df = simplecsv.read_csv('data.csv')
+df = sv.read_csv('data.csv')
 ```
