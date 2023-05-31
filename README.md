@@ -13,7 +13,7 @@ pip install csv-scavenger
 ## Usage
 
 ```python
-import csv-scavenger as sv
+import scavenger as sv
 
 # Read a CSV file into a pandas DataFrame
 df = sv.read_csv('data.csv')
