@@ -1,3 +1,6 @@
+This file demonstrates the use of delimiters within quotes as in "Designer, multimedia" at Index 9.
+These are ignored, and everything within the quotes is considered to be the same entry.
+
 Index,User Id,First Name,Last Name,Sex,Email,Phone,Date of birth,Job Title
 1,8717bbf45cCDbEe,Shelia,Mahoney,Male,pwarner@example.org,857.139.8239,2014-01-27,Probation officer
 2,3d5AD30A4cD38ed,Jo,Rivers,Female,fergusonkatherine@example.net,+1-950-759-8687,1931-07-26,Dancer

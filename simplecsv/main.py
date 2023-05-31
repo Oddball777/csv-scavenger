@@ -6,11 +6,13 @@ from typing import Optional
 
 def _determine_format(lines: list[str]) -> tuple[str, int]:
     formats: list[tuple[str, int]] = []
-    for line in lines:
-        for delim in [";", ",", " ", "\t", "\n", "\r", "\r\n"]:
-            num_of_columns = len(line.strip().split(delim))
-            if num_of_columns > 1:
-                formats.append((delim, num_of_columns))
+    step = len(lines) // 100 if len(lines) > 100 else 1
+    for i, line in enumerate(lines):
+        if i % step == 0:
+            for delim in [";", ",", " ", "\t", "\n", "\r", "\r\n"]:
+                num_of_columns = len(line.strip().split(delim))
+                if num_of_columns > 1:
+                    formats.append((delim, num_of_columns))
     counter = Counter(formats)
     try:
         csv_format: tuple[str, int] = counter.most_common(1)[0][0]
@@ -27,17 +29,15 @@ def _determine_header_start_last(
     header_line = None
     last_line = None
 
-    step = len(lines) // 100 if len(lines) > 100 else 1
     for i, line in enumerate(lines):
-        if i % step == 0:
-            num_of_columns = len(
-                tssplit(line.strip(), quote='"', delimiter=csv_format[0], escape="")  # type: ignore
-            )
-            if num_of_columns == csv_format[1] and header_line == None:
-                header_line = i
-            elif num_of_columns != csv_format[1] and header_line != None:
-                last_line = i
-                break
+        num_of_columns = len(
+            tssplit(line.strip(), quote='"', delimiter=csv_format[0], escape="")  # type: ignore
+        )
+        if num_of_columns == csv_format[1] and header_line == None:
+            header_line = i
+        elif num_of_columns != csv_format[1] and header_line != None:
+            last_line = i
+            break
     if last_line == None:
         last_line = len(lines) - 1
     first_line: Optional[int] = header_line + 1 if header_line != None else None
@@ -81,6 +81,5 @@ if __name__ == "__main__":
     data_faithful = read_csv("simplecsv/example_csvs/faithful.csv")
     data_orgs = read_csv("simplecsv/example_csvs/orgs.csv")
     data_other = read_csv("simplecsv/example_csvs/other.csv")
-    data_bla = read_csv("simplecsv/example_csvs/bla.csv")
-    data_not_data = read_csv("simplecsv/example_csvs/not_data.csv")
-    print(data_not_data)
+    data_multimeter = read_csv("simplecsv/example_csvs/multimeter.csv")
+    print(data_other)
