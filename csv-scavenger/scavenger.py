@@ -52,7 +52,7 @@ def _determine_header_start_last(
             else:
                 header_line = None
             first_line = i + 1
-        elif num_of_columns != csv_format[1] and header_line != None:
+        elif num_of_columns != csv_format[1] and header_line != "undefined":
             last_line = i
             break
 
@@ -97,9 +97,9 @@ def read_csv(file_path: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    # data_people = read_csv("csv-scavenger/example_csvs/people.csv")
-    # data_faithful = read_csv("csv-scavenger/example_csvs/faithful.csv")
-    data_orgs = read_csv("csv-scavenger/example_csvs/orgs copy.csv")
-    # data_health = read_csv("csv-scavenger/example_csvs/health.csv")
-    # data_multimeter = read_csv("csv-scavenger/example_csvs/multimeter.csv")
-    print(data_orgs)
+    data_people = read_csv("csv-scavenger/example_csvs/people.csv")
+    data_faithful = read_csv("csv-scavenger/example_csvs/faithful.csv")
+    data_orgs = read_csv("csv-scavenger/example_csvs/orgs.csv")
+    data_health = read_csv("csv-scavenger/example_csvs/health.csv")
+    data_multimeter = read_csv("csv-scavenger/example_csvs/multimeter.csv")
+    print(data_people)
