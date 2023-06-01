@@ -10,7 +10,9 @@ def _determine_format(lines: list[str]) -> tuple[str, int]:
     for i, line in enumerate(lines):
         if i % step == 0:
             for delim in [";", ",", " ", "\t", "\n", "\r", "\r\n"]:
-                num_of_columns = len(line.strip().split(delim))
+                num_of_columns = len(
+                    tssplit(line.strip(), quote='"', delimiter=delim, escape="")  # type: ignore
+                )
                 if num_of_columns > 1:
                     formats.append((delim, num_of_columns))
     counter = Counter(formats)
@@ -26,21 +28,36 @@ def _determine_format(lines: list[str]) -> tuple[str, int]:
 def _determine_header_start_last(
     csv_format: tuple[str, int], lines: list[str]
 ) -> tuple[Optional[int], Optional[int], Optional[int]]:
-    header_line = None
+    header_line = "undefined"
     last_line = None
+    first_line = None
 
     for i, line in enumerate(lines):
         num_of_columns = len(
             tssplit(line.strip(), quote='"', delimiter=csv_format[0], escape="")  # type: ignore
         )
-        if num_of_columns == csv_format[1] and header_line == None:
-            header_line = i
+        if num_of_columns == csv_format[1] and header_line == "undefined":
+            is_header = True
+            for item in tssplit(
+                line.strip(), quote='"', delimiter=csv_format[0], escape=""
+            ):
+                try:
+                    float(item)
+                    is_header = False
+                    break
+                except ValueError:
+                    pass
+            if is_header:
+                header_line = i
+            else:
+                header_line = None
+            first_line = i + 1
         elif num_of_columns != csv_format[1] and header_line != None:
             last_line = i
             break
+
     if last_line == None:
         last_line = len(lines)
-    first_line: Optional[int] = header_line + 1 if header_line != None else None
     return header_line, first_line, last_line
 
 
@@ -56,8 +73,7 @@ def read_csv(file_path: str) -> pd.DataFrame:
     header_row, data_start_row, data_end_row = _determine_header_start_last(
         csv_format, lines
     )
-
-    if header_row == None or data_start_row == None or data_end_row == None:
+    if header_row == "undefined" or data_start_row == None or data_end_row == None:
         raise ValueError("Could not determine header and data rows.")
 
     data = pd.read_csv(  # type: ignore
@@ -68,6 +84,10 @@ def read_csv(file_path: str) -> pd.DataFrame:
         engine="python",
     )
 
+    if header_row is None:
+        header = list(range(0, data.shape[1]))
+        data.columns = header
+
     if len(data) == 0:
         raise ValueError(
             f"CSV data is not in a recognized format. Detected delimiter is: {csv_format[0]}"
@@ -77,9 +97,9 @@ def read_csv(file_path: str) -> pd.DataFrame:
 
 
 if __name__ == "__main__":
-    data_people = read_csv("csv-scavenger/example_csvs/people.csv")
-    data_faithful = read_csv("csv-scavenger/example_csvs/faithful.csv")
-    data_orgs = read_csv("csv-scavenger/example_csvs/orgs.csv")
-    data_health = read_csv("csv-scavenger/example_csvs/health.csv")
-    data_multimeter = read_csv("csv-scavenger/example_csvs/multimeter.csv")
-    print(data_health)
+    # data_people = read_csv("csv-scavenger/example_csvs/people.csv")
+    # data_faithful = read_csv("csv-scavenger/example_csvs/faithful.csv")
+    data_orgs = read_csv("csv-scavenger/example_csvs/orgs copy.csv")
+    # data_health = read_csv("csv-scavenger/example_csvs/health.csv")
+    # data_multimeter = read_csv("csv-scavenger/example_csvs/multimeter.csv")
+    print(data_orgs)

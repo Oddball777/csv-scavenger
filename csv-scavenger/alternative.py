@@ -1,12 +1,9 @@
 import csv
 from collections import Counter
-from email import header
 
 import pandas
 
-with open(
-    "csv-scavenger/example_csvs/multimeter copy.csv", "r", newline=""
-) as csv_file:
+with open("csv-scavenger/example_csvs/orgs copy.csv", "r", newline="") as csv_file:
     dialect = csv.Sniffer().sniff(csv_file.read(1024))
     csv_reader = csv.reader(csv_file, delimiter=dialect.delimiter)
     csv_file.seek(0)
@@ -22,12 +19,20 @@ with open(
             reader.pop(reader.index(row))
 
 # Determine if first row is header or start of data
-header_row = None
-if all(isinstance(cell, str) for cell in reader[0]):
-    header_row = 0
 
 df = pandas.DataFrame(reader)
-if header_row is not None:
+df = df.infer_objects()
+
+is_header = True
+for item in df.iloc[0]:
+    try:
+        float(item)
+        print("data")
+        is_header = False
+    except ValueError:
+        print("header")
+        break
+if is_header:
     df.columns = df.iloc[0]
     df = df[1:]
-    print(df)
+print(df)
