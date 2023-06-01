@@ -68,6 +68,12 @@ class TestDetermineHeaderStartLast(unittest.TestCase):
         result = _determine_header_start_last(csv_format, mock_lines)
         self.assertEqual(result, (0, 1, 2))
 
+    def test_determine_header_start_last_no_header(self):
+        mock_lines = ["1,2,3\n", "4,5,6\n", "7,8,9\n"]
+        csv_format = (",", 3)
+        result = _determine_header_start_last(csv_format, mock_lines)
+        self.assertEqual(result, ("none", 0, 3))
+
 
 class TestDetermineFormat(unittest.TestCase):
     def test_determine_format(self):
@@ -115,5 +121,15 @@ class TestDetermineFormat(unittest.TestCase):
 
     def test_determine_format_with_different_number_of_columns(self):
         mock_lines = ["a,b,c\n", "1,2,3\n", "4,5,6\n", "7,8,9,10\n"]
+        result = _determine_format(mock_lines)
+        self.assertEqual(result, (",", 3))
+
+    def test_determine_format_with_quoted_delim(self):
+        mock_lines = [
+            '"a","b","c"\n',
+            '"1, good","2, bad","3, ok"\n',
+            '"4, weird","5, something","6, not"\n',
+            '"7, another","8, crazy","9, file"\n',
+        ]
         result = _determine_format(mock_lines)
         self.assertEqual(result, (",", 3))

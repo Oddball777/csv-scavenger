@@ -29,8 +29,8 @@ def _determine_header_start_last(
     csv_format: tuple[str, int], lines: list[str]
 ) -> tuple[Optional[int], Optional[int], Optional[int]]:
     header_line = "undefined"
-    last_line = None
-    first_line = None
+    last_line = "undefined"
+    first_line = "undefined"
 
     for i, line in enumerate(lines):
         num_of_columns = len(
@@ -49,14 +49,16 @@ def _determine_header_start_last(
                     pass
             if is_header:
                 header_line = i
+                first_line = i + 1
             else:
-                header_line = None
-            first_line = i + 1
+                print("no header")
+                header_line = "none"
+                first_line = i
         elif num_of_columns != csv_format[1] and header_line != "undefined":
             last_line = i
             break
 
-    if last_line == None:
+    if last_line == "undefined":
         last_line = len(lines)
     return header_line, first_line, last_line
 
@@ -73,20 +75,30 @@ def read_csv(file_path: str) -> pd.DataFrame:
     header_row, data_start_row, data_end_row = _determine_header_start_last(
         csv_format, lines
     )
-    if header_row == "undefined" or data_start_row == None or data_end_row == None:
+    if (
+        header_row == "undefined"
+        or data_start_row == "undefined"
+        or data_end_row == "undefined"
+    ):
         raise ValueError("Could not determine header and data rows.")
 
-    data = pd.read_csv(  # type: ignore
-        file_path,
-        sep=csv_format[0],
-        skiprows=data_start_row - 1,
-        nrows=data_end_row - data_start_row,
-        engine="python",
-    )
-
-    if header_row is None:
-        header = list(range(0, data.shape[1]))
-        data.columns = header
+    if header_row == "none":
+        data = pd.read_csv(  # type: ignore
+            file_path,
+            sep=csv_format[0],
+            skiprows=data_start_row - 1,
+            nrows=data_end_row - data_start_row,
+            engine="python",
+            header=None,
+        )
+    else:
+        data = pd.read_csv(  # type: ignore
+            file_path,
+            sep=csv_format[0],
+            skiprows=data_start_row - 1,
+            nrows=data_end_row - data_start_row,
+            engine="python",
+        )
 
     if len(data) == 0:
         raise ValueError(
@@ -102,4 +114,4 @@ if __name__ == "__main__":
     data_orgs = read_csv("csv-scavenger/example_csvs/orgs.csv")
     data_health = read_csv("csv-scavenger/example_csvs/health.csv")
     data_multimeter = read_csv("csv-scavenger/example_csvs/multimeter.csv")
-    print(data_people)
+    print(data_multimeter)
