@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "csv-scavenger"
-version = "1.0.4"
+version = "1.0.5"
 description = "CSV reader and parser with automatic detection of delimiter and start/end of data."
 authors = ["Gustave Coulombe <magikgus@gmail.com>"]
 readme = "README.md"
