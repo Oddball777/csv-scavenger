@@ -6,15 +6,15 @@ from typing import Optional
 
 def _determine_format(lines: list[str]) -> tuple[str, int]:
     formats: list[tuple[str, int]] = []
-    step = len(lines) // 100 if len(lines) > 100 else 1
-    for i, line in enumerate(lines):
-        if i % step == 0:
-            for delim in [";", ",", " ", "\t", "\n", "\r", "\r\n"]:
-                num_of_columns = len(
-                    tssplit(line.strip(), quote='"', delimiter=delim, escape="")  # type: ignore
-                )
-                if num_of_columns > 1:
-                    formats.append((delim, num_of_columns))
+    step = max(1, len(lines) // 100)
+    for i in range(0, len(lines), step):
+        line = lines[i]
+        for delim in [";", ",", " ", "\t", "\n", "\r", "\r\n"]:
+            num_of_columns = len(
+                tssplit(line.strip(), quote='"', delimiter=delim, escape="")  # type: ignore
+            )
+            if num_of_columns > 1:
+                formats.append((delim, num_of_columns))
     counter = Counter(formats)
     try:
         csv_format: tuple[str, int] = counter.most_common(1)[0][0]
