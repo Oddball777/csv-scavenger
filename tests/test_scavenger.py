@@ -1,7 +1,4 @@
-from calendar import c
-import csv
 import unittest
-from unittest import mock
 
 from scavenger import _determine_header_start_last, read_csv, _determine_format
 
