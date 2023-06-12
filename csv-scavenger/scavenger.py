@@ -6,10 +6,11 @@ from typing import Optional
 
 def _determine_format(lines: list[str]) -> tuple[str, int]:
     formats: list[tuple[str, int]] = []
+    delimiters = [";", ",", " ", "\t", "\n", "\r", "\r\n"]
     step = max(1, len(lines) // 100)
     for i in range(0, len(lines), step):
         line = lines[i]
-        for delim in [";", ",", " ", "\t", "\n", "\r", "\r\n"]:
+        for delim in delimiters:
             num_of_columns = len(
                 tssplit(line.strip(), quote='"', delimiter=delim, escape="")  # type: ignore
             )
