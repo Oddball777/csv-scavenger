@@ -1,7 +1,6 @@
 import pandas as pd
 from collections import Counter
 from tssplit import tssplit  # type: ignore
-from typing import Optional
 
 
 def _determine_format(lines: list[str]) -> tuple[str, int]:
@@ -28,7 +27,7 @@ def _determine_format(lines: list[str]) -> tuple[str, int]:
 
 def _determine_header_start_last(
     csv_format: tuple[str, int], lines: list[str]
-) -> tuple[Optional[int], Optional[int], Optional[int]]:
+) -> tuple[int | str, int | str, int | str]:
     header_line = "undefined"
     last_line = "undefined"
     first_line = "undefined"
@@ -76,12 +75,16 @@ def read_csv(file_path: str) -> pd.DataFrame:
     header_row, data_start_row, data_end_row = _determine_header_start_last(
         csv_format, lines
     )
-    if (
-        header_row == "undefined"
-        or data_start_row == "undefined"
-        or data_end_row == "undefined"
-    ):
+    if header_row == "undefined":
         raise ValueError("Could not determine header and data rows.")
+
+    try:
+        assert isinstance(data_start_row, int)
+        assert isinstance(data_end_row, int)
+    except AssertionError:
+        raise AssertionError(
+            "Could not determine header and data rows. Please check your CSV file."
+        )
 
     if header_row == "none":
         data = pd.read_csv(  # type: ignore
